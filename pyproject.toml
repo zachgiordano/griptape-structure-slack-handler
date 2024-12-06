@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "griptape-structure-slack-handler"
+version = "0.1.0"
+description = ""
+authors = ["zach <zach@griptape.ai>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+azure-identity = "^1.6.0"
+griptape = {git = "https://github.com/griptape-ai/griptape", branch = "dev"}
+requests = "^2.32.3"
+requests-toolbelt = "^1.0.0"
+slack_bolt = "^1.21.3"
+
+[tool.poetry.dev-dependencies]
+black = "^24.8.0"
+invoke = "^2.2.0"
+python-dotenv = "^1.0.1"
+requests = "^2.32.3"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
