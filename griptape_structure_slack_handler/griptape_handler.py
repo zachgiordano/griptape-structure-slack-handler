@@ -82,6 +82,12 @@ def _get_default_rulesets() -> list[Ruleset]:
                 raise_not_found=True, ruleset_id="60a368ef-f5ac-4c63-990c-80a7364a22a0"
             ),
         ),
+        # Zach Prime ID Ruleset
+        Ruleset(
+            ruleset_driver=GriptapeCloudRulesetDriver(
+                raise_not_found=True, ruleset_id="6f35283b-e336-433b-84dd-9ee53e8c69bf"
+            ),
+        ),
         # Slack Formatting Ruleset
         Ruleset(
             ruleset_driver=GriptapeCloudRulesetDriver(
