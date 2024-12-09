@@ -90,6 +90,9 @@ def _init_tools_dict() -> dict[str, tuple[BaseTool, str]]:
     truck_knowledge_base_tool = _get_knowledge_base_tool(
         "truckKB", "TRUCK_KNOWLEDGE_BASE_ID"
     )
+    quotes_knowledge_base_tool = _get_knowledge_base_tool(
+        "quotes", "QUOTE_KNOWLEDGE_BASE_ID"
+    )
     return {
         "rv_knowledge_base_tool": (
             rv_knowledge_base_tool,
@@ -98,6 +101,10 @@ def _init_tools_dict() -> dict[str, tuple[BaseTool, str]]:
         "truck_knowledge_base_tool": (
             truck_knowledge_base_tool,
             truck_knowledge_base_tool.description,
+        ),
+        "quote_knowledge_base_tool": (
+            quotes_knowledge_base_tool,
+            quotes_knowledge_base_tool.description,
         ),
         "github_tool": (
             GriptapeCloudToolTool(
