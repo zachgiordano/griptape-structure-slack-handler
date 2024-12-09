@@ -94,6 +94,12 @@ def _get_default_rulesets() -> list[Ruleset]:
                 raise_not_found=True, ruleset_id="b2cae474-a25c-476b-90a1-f39d588dd711"
             ),
         ),
+        # Slack Tool Ruleset
+        Ruleset(
+            ruleset_driver=GriptapeCloudRulesetDriver(
+                raise_not_found=True, ruleset_id="31b9d849-dade-4c3f-ac31-377ff6f02307"
+            ),
+        ),
     ]
 
 
