@@ -1,11 +1,12 @@
 from __future__ import annotations
-import logging
-from attrs import define, field, Factory
-from typing import TYPE_CHECKING
-import threading
 
-from griptape.events import BaseEvent
+import logging
+import threading
+from typing import TYPE_CHECKING
+
+from attrs import Factory, define, field
 from griptape.drivers import BaseEventListenerDriver
+from griptape.events import BaseEvent
 from griptape.tools import BaseTool
 
 if TYPE_CHECKING:
@@ -40,8 +41,7 @@ class SlackEventListenerDriver(BaseEventListenerDriver):
             new_text = "".join([event.get("text", "") for event in event_payload_batch])
             try:
                 res = self._slack_responses[self.ts] = self.web_client.chat_update(
-                    text=self._slack_responses.get(self.ts, {}).get("text", "")
-                    + new_text,
+                    text=self._slack_responses.get(self.ts, {}).get("text", "") + new_text,
                     ts=self.ts,
                     thread_ts=self.thread_ts,
                     channel=self.channel,
@@ -62,9 +62,7 @@ class SlackEventListenerDriver(BaseEventListenerDriver):
             payload = {**event_payload}
             try:
                 if "blocks" in event_payload:
-                    payload["blocks"] = (
-                        self._get_last_blocks() + event_payload["blocks"]
-                    )
+                    payload["blocks"] = self._get_last_blocks() + event_payload["blocks"]
                 res = self.web_client.chat_update(
                     **payload,
                     ts=self.ts,
@@ -84,6 +82,4 @@ class SlackEventListenerDriver(BaseEventListenerDriver):
                 self.ts = res["ts"]
 
     def _get_last_blocks(self):
-        return (
-            self._slack_responses.get(self.ts, {}).get("message", {}).get("blocks", [])
-        )
+        return self._slack_responses.get(self.ts, {}).get("message", {}).get("blocks", [])

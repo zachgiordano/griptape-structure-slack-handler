@@ -1,24 +1,25 @@
-import os
 import logging
-from slack_bolt import App, Say, BoltRequest
+import os
+
+from slack_bolt import App, BoltRequest, Say
 from slack_sdk import WebClient
 
-from .slack_util import (
-    error_payload,
-    thinking_payload,
-    markdown_blocks_list,
-)
-from .griptape_handler import (
-    agent,
-    get_rulesets,
-    try_add_to_thread,
-    is_relevant_response,
-)
-from .griptape_event_handlers import event_listeners
 from .features import (
     persist_thoughts_enabled,
     stream_output_enabled,
     thread_history_enabled,
+)
+from .griptape_event_handlers import event_listeners
+from .griptape_handler import (
+    agent,
+    get_rulesets,
+    is_relevant_response,
+    try_add_to_thread,
+)
+from .slack_util import (
+    error_payload,
+    markdown_blocks_list,
+    thinking_payload,
 )
 
 logger = logging.getLogger()
@@ -116,9 +117,7 @@ def respond_in_thread(body: dict, payload: dict, say: Say, client: WebClient):
         )
         # wip, if any rulesets have stream=True, then stream the response
         # changes the slack app behavior. any truthy value will work
-        stream = stream or any(
-            [ruleset.meta.get("stream", False) for ruleset in rulesets]
-        )
+        stream = stream or any([ruleset.meta.get("stream", False) for ruleset in rulesets])
 
         agent_output = agent(
             payload["text"],

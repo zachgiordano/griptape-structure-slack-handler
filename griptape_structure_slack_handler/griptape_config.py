@@ -17,12 +17,8 @@ def load_griptape_config() -> None:
             azure_endpoint=os.environ["AZURE_OPENAI_ENDPOINT"],
         )
 
-    Defaults.drivers_config.ruleset_driver = GriptapeCloudRulesetDriver(
-        raise_not_found=False
-    )
-    Defaults.drivers_config.conversation_memory_driver = (
-        GriptapeCloudConversationMemoryDriver()
-    )
+    Defaults.drivers_config.ruleset_driver = GriptapeCloudRulesetDriver(raise_not_found=False)
+    Defaults.drivers_config.conversation_memory_driver = GriptapeCloudConversationMemoryDriver()
 
 
 def set_thread_alias(thread_alias: Optional[str]) -> None:

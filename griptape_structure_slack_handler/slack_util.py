@@ -109,11 +109,7 @@ def markdown_block(text: str, **kwargs) -> dict:
 
 def emoji_blocks(emoji: str, text: str, *, format: bool = True, **kwargs) -> list[dict]:
     """Gets a block with the emoji and text."""
-    return (
-        markdown_blocks(f"{emoji} _{text}_", **kwargs)
-        if format
-        else markdown_blocks(f"{emoji} {text}", **kwargs)
-    )
+    return markdown_blocks(f"{emoji} _{text}_", **kwargs) if format else markdown_blocks(f"{emoji} {text}", **kwargs)
 
 
 def action_blocks(action: str, **kwargs) -> list[dict]:
@@ -149,9 +145,7 @@ def markdown_blocks_list(text: str) -> list[list[dict]]:
 ## Chunking methods ##
 
 
-def pretty_chunking(
-    text: str, min_chunk_size: int, max_chunk_size: int
-) -> Generator[str, None, None]:
+def pretty_chunking(text: str, min_chunk_size: int, max_chunk_size: int) -> Generator[str, None, None]:
     """
     Split the text into chunks based on the chunk sizes.
     Try to split on periods, newlines, or spaces if possible.
@@ -183,9 +177,7 @@ def pretty_chunking_text(text: str) -> Generator[str, None, None]:
     """
     Split the text into chunks that are less than the slack max character limit for text.
     """
-    return pretty_chunking(
-        text, SLACK_MAX_TEXT_CHARACTERS - 1000, SLACK_MAX_TEXT_CHARACTERS
-    )
+    return pretty_chunking(text, SLACK_MAX_TEXT_CHARACTERS - 1000, SLACK_MAX_TEXT_CHARACTERS)
 
 
 def pretty_chunking_block(text: str) -> Generator[str, None, None]:

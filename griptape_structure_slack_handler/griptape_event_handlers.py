@@ -1,23 +1,22 @@
 from __future__ import annotations
 
+import json
+import logging
 from typing import Optional
 
-import logging
-import json
-
 from griptape.events import (
+    ActionChunkEvent,
     BaseEvent,
     EventListener,
-    StartStructureRunEvent,
-    StartActionsSubtaskEvent,
     FinishActionsSubtaskEvent,
-    ActionChunkEvent,
+    StartActionsSubtaskEvent,
+    StartStructureRunEvent,
     TextChunkEvent,
 )
 
-from .griptape.tool_event import ToolEvent
 from .griptape.slack_event_listener_driver import SlackEventListenerDriver
-from .slack_util import thought_block, action_block, emoji_block
+from .griptape.tool_event import ToolEvent
+from .slack_util import action_block, emoji_block, thought_block
 
 logger = logging.getLogger()
 
@@ -100,9 +99,7 @@ def start_actions_subtask_handler(event: StartActionsSubtaskEvent) -> Optional[d
     if event.subtask_thought is not None:
         blocks.append(thought_block(event.subtask_thought))
     for action in event.subtask_actions:
-        action_input = "\n".join(
-            [f"*{key}*: _{value}_ " for key, value in action["input"]["values"].items()]
-        )
+        action_input = "\n".join([f"*{key}*: _{value}_ " for key, value in action["input"]["values"].items()])
         blocks.append(
             action_block(
                 f"_I will use {action['name']}.{action['path']} with input:_\n\n{action_input}",
@@ -134,7 +131,9 @@ def action_stream_handler(event: ActionChunkEvent) -> Optional[dict]:
     if action is not None:
         try:
             loaded = json.loads(action)
-            action = f"I need the {event.name} with action {event.path} with input: {json.dumps(loaded['values'], indent=2)}"
+            action = (
+                f"I need the {event.name} with action {event.path} with input: {json.dumps(loaded['values'], indent=2)}"
+            )
         except Exception:
             pass
 

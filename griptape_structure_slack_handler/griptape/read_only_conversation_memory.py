@@ -3,7 +3,6 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from attrs import define
-
 from griptape.memory.structure import ConversationMemory
 
 if TYPE_CHECKING:

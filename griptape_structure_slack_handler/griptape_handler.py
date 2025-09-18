@@ -1,23 +1,23 @@
 from __future__ import annotations
 
 import json
-from typing import Optional, TYPE_CHECKING
 import logging
 import re
-from schema import Schema, Literal
+from typing import TYPE_CHECKING, Optional
 
-from griptape.events import EventBus
 from griptape.artifacts import ErrorArtifact, TextArtifact
 from griptape.drivers import GriptapeCloudRulesetDriver
-from griptape.rules import Ruleset, Rule, JsonSchemaRule
-from griptape.structures import Agent
+from griptape.events import EventBus
 from griptape.memory.structure import ConversationMemory, Run
+from griptape.rules import JsonSchemaRule, Rule, Ruleset
+from griptape.structures import Agent
+from schema import Literal, Schema
 
 from griptape_structure_slack_handler.griptape_event_handlers import ToolEvent
 
-from .griptape_tool_box import get_tools
-from .griptape_config import load_griptape_config, set_thread_alias
 from .features import dynamic_rulesets_enabled, dynamic_tools_enabled
+from .griptape_config import load_griptape_config, set_thread_alias
+from .griptape_tool_box import get_tools
 
 if TYPE_CHECKING:
     from griptape.events import EventListener
@@ -29,9 +29,7 @@ logger = logging.getLogger()
 load_griptape_config()
 
 
-def try_add_to_thread(
-    message: str, *, thread_alias: Optional[str] = None, user_id: str
-) -> None:
+def try_add_to_thread(message: str, *, thread_alias: Optional[str] = None, user_id: str) -> None:
     set_thread_alias(thread_alias)
     # find all the user_ids @ mentions in the message
     mentioned_user_ids = re.findall(r"<@([\w]+)>", message)
@@ -59,11 +57,7 @@ def try_add_to_thread(
 
 
 def get_rulesets(**kwargs) -> list[Ruleset]:
-    rulesets = (
-        [Ruleset(name=value) for value in kwargs.values()]
-        if dynamic_rulesets_enabled()
-        else []
-    )
+    rulesets = [Ruleset(name=value) for value in kwargs.values()] if dynamic_rulesets_enabled() else []
     rulesets.extend(_get_default_rulesets())
     return rulesets
 
@@ -113,9 +107,7 @@ def agent(
     stream: bool,
 ) -> str:
     set_thread_alias(thread_alias)
-    dynamic_tools = dynamic_tools_enabled() or any(
-        [ruleset.meta.get("dynamic_tools", False) for ruleset in rulesets]
-    )
+    dynamic_tools = dynamic_tools_enabled() or any([ruleset.meta.get("dynamic_tools", False) for ruleset in rulesets])
     tools = get_tools(message, dynamic=dynamic_tools)
     EventBus.add_event_listeners(event_listeners)
 
@@ -140,9 +132,7 @@ def is_relevant_response(message: str, response: str) -> bool:
         rulesets=[
             Ruleset(
                 rules=[
-                    Rule(
-                        "You should respond if the response is helpful and relevant to the user"
-                    ),
+                    Rule("You should respond if the response is helpful and relevant to the user"),
                     Rule(
                         "If the message is a question, the response should be shown to the user if the response is helpful and relevant."
                     ),
