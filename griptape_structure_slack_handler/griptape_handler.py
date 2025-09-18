@@ -7,6 +7,7 @@ from typing import TYPE_CHECKING, Optional
 
 from griptape.artifacts import ErrorArtifact, TextArtifact
 from griptape.drivers import GriptapeCloudRulesetDriver
+from griptape.drivers.prompt.griptape_cloud_prompt_driver import GriptapeCloudPromptDriver
 from griptape.events import EventBus
 from griptape.memory.structure import ConversationMemory, Run
 from griptape.rules import JsonSchemaRule, Rule, Ruleset
@@ -119,6 +120,7 @@ def agent(
         tools=tools,
         rulesets=rulesets,
         stream=stream,
+        prompt_driver=GriptapeCloudPromptDriver(model="gpt-5"),
     )
     output = agent.run(user_id, message).output
     if isinstance(output, ErrorArtifact):
@@ -128,6 +130,7 @@ def agent(
 
 def is_relevant_response(message: str, response: str) -> bool:
     agent = Agent(
+        prompt_driver=GriptapeCloudPromptDriver(model="gpt-4.1"),
         input="Given the following message: '{{ args[0] }}', is the following response helpful and relevant? Response: {{ args[1] }}",
         rulesets=[
             Ruleset(

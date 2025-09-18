@@ -1,9 +1,7 @@
 import logging
 import os
 
-from griptape.drivers import (
-    GriptapeCloudVectorStoreDriver,
-)
+from griptape.drivers import GriptapeCloudPromptDriver, GriptapeCloudVectorStoreDriver
 from griptape.engines.rag import RagEngine
 from griptape.engines.rag.modules import (
     TextChunksResponseRagModule,
@@ -32,6 +30,7 @@ def get_tools(message: str, *, dynamic: bool = False) -> list[BaseTool]:
     tools_descriptions = {k: description for k, (_, description) in tools_dict.items()}
 
     agent = Agent(
+        prompt_driver=GriptapeCloudPromptDriver(model="gpt-5"),
         tasks=[
             PromptTask(
                 input="Given the input, what tools are needed to give an accurate response? Input: '{{ args[0] }}' Tools: {{ args[1] }}",
